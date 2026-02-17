@@ -1,5 +1,6 @@
 package dataConfig;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,6 +14,15 @@ public class Database {
     }
 
     public static void init(){
+
+        File dataDir = new File("data");
+        if (!dataDir.exists()) {
+            boolean created = dataDir.mkdirs();
+            if (!created) {
+                System.out.println("Error: 'data' folder has not been created.");
+            }
+        }
+
         String createPeople = """
             CREATE TABLE IF NOT EXISTS people (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
