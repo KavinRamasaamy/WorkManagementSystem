@@ -19,7 +19,7 @@ public class MenuService {
 
         System.out.println("Administrator access detected: \n1) Edit employee information \n2) Record my shift \n3) Exit?");
 
-        int choice = InputUtilities.readInt(input, 2);
+        int choice = InputUtilities.readInt(input, 3);
 
         switch (choice) {
             case 1 -> EmployeeRepository.editingInformation(input);
