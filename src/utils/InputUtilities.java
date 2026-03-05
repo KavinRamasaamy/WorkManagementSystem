@@ -6,7 +6,7 @@ public class InputUtilities {
 
     // returns viable number
     public static int readInt(Scanner input, int maxOption) {
-        int num = -1;
+        int num;
         while (true) {
             String line = input.nextLine().trim();
             try {
