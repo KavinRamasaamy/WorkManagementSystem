@@ -11,7 +11,7 @@ public class AuthenticationService {
     static int choice;
 
     public static int login(Scanner input) {
-        System.out.print("Hello this is the Simple Work Management System");
+        System.out.println("Hello this is the Simple Work Management System");
         System.out.println("Would you like to: \n1) Create a profile for an employee \n2) Continue as an existing profile \n3) Exit?");
         choice = InputUtilities.readInt(input, 3);
         switch (choice) {
@@ -33,8 +33,16 @@ public class AuthenticationService {
     }
 
     public static void newAccount(Scanner input) {
-        System.out.println("What is your name?");
-        person = input.nextLine().toUpperCase();
+        while (true){
+            System.out.println("What is your name?");
+            person = input.nextLine().toUpperCase();
+
+            if (person.isBlank()){
+                System.out.println("Please enter a valid name!");
+                continue;
+            }
+            break;
+        }
 
         if (EmployeeRepository.personExists(person)) {
             System.out.println("Somebody by that name already exists. Do you have an existing account (y/n)?");

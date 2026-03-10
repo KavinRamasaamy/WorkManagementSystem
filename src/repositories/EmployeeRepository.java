@@ -6,6 +6,7 @@ import utils.InputUtilities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class EmployeeRepository {
@@ -94,6 +95,7 @@ public class EmployeeRepository {
 
     public static void editingInformation(Scanner input) {
         int chosenEmployeeID;
+        ArrayList<Integer> matchingEmployees = new ArrayList<>();
         while (true) {
             System.out.print("Enter the name of the employee you want to edit: ");
             String name = input.nextLine().trim().toUpperCase();
@@ -117,6 +119,7 @@ public class EmployeeRepository {
                             rs.getString("name"),
                             rs.getString("birthdate")
                     );
+                    matchingEmployees.add(rs.getInt("id"));
                 }
                 if (!found) {
                     System.out.println("No employees found with that name. Would you like to: \n1) Retry \n2) Exit");
@@ -135,9 +138,21 @@ public class EmployeeRepository {
                 return;
             }
 
-
-            System.out.print("Enter the ID of the employee you want to edit: ");
-            chosenEmployeeID = InputUtilities.readInt(input, 1000000);
+            while (true){
+                System.out.print("Enter the ID of the employee you want to edit: ");
+                chosenEmployeeID = InputUtilities.readInt(input, 1000000);
+                if  (matchingEmployees.contains(chosenEmployeeID)) {
+                    break;
+                }
+                else{
+                    System.out.println("No employees found with that ID. Would you like to: \n1) Retry \n2) Exit");
+                    int choice = InputUtilities.readInt(input, 2);
+                    if  (choice == 2) {
+                        System.out.println("Goodbye!");
+                        System.exit(0);
+                    }
+                }
+            }
 
             //If user exists, break out and continue editing
             break;
@@ -179,15 +194,7 @@ public class EmployeeRepository {
 
                 case "2" -> {
                     String birthdate;
-                    while (true) {
-                        System.out.print("Enter birthdate (YYYY-MM-DD): ");
-                        birthdate = input.nextLine().trim();
-                        if (birthdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                            break; // valid format
-                        } else {
-                            System.out.println("Invalid format. Please use YYYY-MM-DD.");
-                        }
-                    }
+                    birthdate = InputUtilities.readDate(input).toString();
 
                     sql = "UPDATE people SET birthdate = ? WHERE id = ?";
                     try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -272,17 +279,7 @@ public class EmployeeRepository {
     public static int addPerson(String person, Scanner input, boolean starter) {
         person = person.toUpperCase();
 
-        String birthdate;
-        while (true) {
-            System.out.print("Enter birthdate (YYYY-MM-DD): ");
-            birthdate = input.nextLine().trim();
-
-            if (birthdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                break;
-            } else {
-                System.out.println("Invalid format. Please use YYYY-MM-DD.");
-            }
-        }
+        String birthdate = InputUtilities.readDate(input).toString();
 
         float wage;
         while (true) {
