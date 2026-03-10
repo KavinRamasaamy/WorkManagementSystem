@@ -44,7 +44,7 @@ On launch, you can:
 
 ## Technologies Used
 
-- Java 17
+- Java 21
 
 - SQLite
 
